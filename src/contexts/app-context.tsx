@@ -11,6 +11,9 @@ export type Screen =
   | "skill-gap"
   | "mentorship"
   | "progress"
+  | "notifications"
+  | "ai-advisor"
+  | "job-tracker"
 
 export interface Career {
   id: number

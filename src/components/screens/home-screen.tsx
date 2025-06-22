@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Brain, Briefcase, Users, BookOpen, BarChart3, ChevronRight } from "lucide-react"
+import { Brain, Briefcase, Users, BookOpen, BarChart3, ChevronRight, MessageCircle, Bell } from "lucide-react"
 import { useApp } from "../../contexts/app-context"
 import { Header } from "../shared/header"
 import { BottomNavigation } from "../shared/bottom-navigation"
@@ -51,6 +51,27 @@ export function HomeScreen() {
       icon: BarChart3,
       gradient: "from-pink-400 to-purple-500",
       screen: "progress" as const,
+    },
+    {
+      title: "AI Career Advisor",
+      description: "Get instant career advice",
+      icon: MessageCircle,
+      gradient: "from-blue-400 to-cyan-500",
+      screen: "ai-advisor" as const,
+    },
+    {
+      title: "Job Applications",
+      description: "Track your applications",
+      icon: Briefcase,
+      gradient: "from-purple-400 to-indigo-500",
+      screen: "job-tracker" as const,
+    },
+    {
+      title: "Notifications",
+      description: "Stay updated on your journey",
+      icon: Bell,
+      gradient: "from-red-400 to-pink-500",
+      screen: "notifications" as const,
     },
   ]
 

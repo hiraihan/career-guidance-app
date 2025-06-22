@@ -4,7 +4,13 @@ import { OnboardingScreen } from "@/components/screens/onboarding-screen"
 import { HomeScreen } from "@/components/screens/home-screen"
 import { TestScreen } from "@/components/screens/test-screen"
 import { RecommendationsScreen } from "@/components/screens/recommendations-screen"
-
+import { CareerDetailScreen } from "@/components/screens/career-detail-screen"
+import { SkillGapScreen } from "@/components/screens/skill-gap-screen"
+import { MentorshipScreen } from "@/components/screens/mentorship-screen"
+import { ProgressScreen } from "@/components/screens/progress-screen"
+import { NotificationsScreen } from "@/components/screens/notifications-screen"
+import { AIAdvisorScreen } from "@/components/screens/ai-advisor-screen"
+import { JobTrackerScreen } from "@/components/screens/job-tracker-screen"
 
 function AppContent() {
   const { currentScreen } = useApp()
@@ -14,10 +20,13 @@ function AppContent() {
     home: HomeScreen,
     test: TestScreen,
     recommendations: RecommendationsScreen,
-    "career-detail": () => <div>Career Detail (Coming Soon)</div>,
-    "skill-gap": () => <div>Skill Gap (Coming Soon)</div>,
-    mentorship: () => <div>Mentorship (Coming Soon)</div>,
-    progress: () => <div>Progress (Coming Soon)</div>,
+    "career-detail": CareerDetailScreen,
+    "skill-gap": SkillGapScreen,
+    mentorship: MentorshipScreen,
+    progress: ProgressScreen,
+    notifications: NotificationsScreen,
+    "ai-advisor": AIAdvisorScreen,
+    "job-tracker": JobTrackerScreen,
   }
 
   const CurrentScreen = screens[currentScreen]
