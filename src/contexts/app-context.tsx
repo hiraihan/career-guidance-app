@@ -14,6 +14,7 @@ export type Screen =
   | "notifications"
   | "ai-advisor"
   | "job-tracker"
+  | "analytics"
 
 export interface Career {
   id: number
