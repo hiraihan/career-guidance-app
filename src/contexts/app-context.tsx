@@ -65,6 +65,8 @@ interface AppContextType {
   addTestAnswer: (answer: string) => void
   toggleSavedCareer: (careerId: number) => void
   updateProgress: (progress: number) => void
+  goBack: () => void
+  navigationHistory: Screen[]
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined)
@@ -78,9 +80,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [testAnswers, setTestAnswers] = useState<string[]>([])
   const [savedCareers, setSavedCareers] = useState<number[]>([])
   const [userProgress, setUserProgress] = useState(60)
+  const [navigationHistory, setNavigationHistory] = useState<Screen[]>(["onboarding"])
 
   const navigateToScreen = (screen: Screen) => {
+    setNavigationHistory((prev) => [...prev, screen])
     setCurrentScreen(screen)
+  }
+
+  const goBack = () => {
+    if (navigationHistory.length > 1) {
+      const newHistory = navigationHistory.slice(0, -1)
+      setNavigationHistory(newHistory)
+      setCurrentScreen(newHistory[newHistory.length - 1])
+    }
   }
 
   const toggleDarkMode = () => {
@@ -120,6 +132,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         addTestAnswer,
         toggleSavedCareer,
         updateProgress,
+        goBack,
+        navigationHistory,
       }}
     >
       {children}
