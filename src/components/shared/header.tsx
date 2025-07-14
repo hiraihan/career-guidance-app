@@ -9,7 +9,7 @@ import { useApp } from "../../contexts/app-context"
 import type { Screen } from "../../contexts/app-context"
 
 interface HeaderProps {
-  title: string
+  title: string | React.ReactNode
   showBack?: boolean
   backScreen?: Screen
   showProfile?: boolean
