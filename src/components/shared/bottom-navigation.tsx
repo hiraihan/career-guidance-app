@@ -29,28 +29,32 @@ export function BottomNavigation() {
         darkMode
           ? "bg-gray-900/95 border-gray-800/50 backdrop-blur-xl"
           : "bg-white/95 border-gray-200/50 backdrop-blur-xl"
-      } border-t shadow-2xl`}
+      } border-t shadow-2xl z-50`}
     >
-      <div className="flex justify-around items-center max-w-sm mx-auto px-4 py-3 sm:py-4">
+      <div className="flex justify-around items-center max-w-sm mx-auto px-4 py-4">
         {navItems.map((item) => (
           <Button
             key={item.screen}
             variant="ghost"
             size="sm"
-            className={`flex flex-col items-center space-y-1 px-3 py-2 rounded-2xl transition-all duration-300 hover:scale-105 active:scale-95 ${
+            className={`flex flex-col items-center space-y-2 px-4 py-3 rounded-3xl transition-all duration-300 hover:scale-110 active:scale-95 relative ${
               currentScreen === item.screen
-                ? "text-blue-600 bg-blue-50 dark:bg-blue-900/30 shadow-lg"
+                ? "text-blue-600 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 shadow-lg scale-110"
                 : darkMode
-                  ? "text-gray-400 hover:text-white hover:bg-gray-800"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                  ? "text-gray-400 hover:text-white hover:bg-gray-800/50"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100/50"
             }`}
             onClick={() => handleNavigation(item.screen)}
-            onTouchStart={() => {}} // Ensure touch events work
           >
+            {currentScreen === item.screen && (
+              <div className="absolute -top-1 w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+            )}
             <item.icon
-              className={`w-5 h-5 transition-transform duration-300 ${currentScreen === item.screen ? "scale-110" : ""}`}
+              className={`w-6 h-6 transition-all duration-300 ${currentScreen === item.screen ? "scale-110" : ""}`}
             />
-            <span className="text-xs font-medium">{item.label}</span>
+            <span className={`text-xs font-medium ${currentScreen === item.screen ? "font-bold" : ""}`}>
+              {item.label}
+            </span>
           </Button>
         ))}
       </div>

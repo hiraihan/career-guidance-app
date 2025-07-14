@@ -18,13 +18,13 @@ import {
   Zap,
   TrendingUp,
   PieChart,
+  Compass,
 } from "lucide-react"
 import { useApp } from "../../contexts/app-context"
 import { Header } from "../shared/header"
 import { BottomNavigation } from "../shared/bottom-navigation"
 import { AnimatedCounter } from "../ui/animated-counter"
 import { AchievementCelebration } from "../ui/achievement-celebration"
-import { SkillRadarChart } from "../ui/skill-radar-chart"
 
 interface Achievement {
   id: number
@@ -68,6 +68,7 @@ export function HomeScreen() {
     }
   }, [achievementShown])
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const skillData = [
     { skill: "Design", current: 85, target: 95, color: "#3b82f6" },
     { skill: "Research", current: 60, target: 85, color: "#8b5cf6" },
@@ -177,201 +178,174 @@ export function HomeScreen() {
         <div className="absolute bottom-40 left-20 w-40 h-40 bg-pink-500/5 rounded-full blur-3xl animate-pulse delay-2000" />
       </div>
 
-      <Header title="Good morning, Alex! 👋" showProfile={true} showDarkMode={true} />
+      <Header
+        title={
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center relative">
+              <Compass className="w-6 h-6 text-white" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full flex items-center justify-center">
+                <Sparkles className="w-2 h-2 text-yellow-800" />
+              </div>
+            </div>
+            <div>
+              <h1 className="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                CareerCompass
+              </h1>
+              <p className="text-xs text-gray-500">Good morning, Alex! 👋</p>
+            </div>
+          </div>
+        }
+        showProfile={true}
+        showDarkMode={true}
+      />
 
-      <div className="p-4 sm:p-6 space-y-6 sm:space-y-8 relative">
-        {/* Gamification Stats */}
-        <div className="grid grid-cols-3 gap-3 sm:gap-4">
-          <Card
-            className={`${darkMode ? "bg-gray-800/60 border-gray-700/50 backdrop-blur-xl" : "bg-white/70 border-white/20 backdrop-blur-xl"} shadow-lg rounded-2xl`}
-          >
-            <CardContent className="p-4 text-center">
-              <div className="flex items-center justify-center mb-2">
-                <Zap className="w-5 h-5 text-yellow-500 mr-1" />
-                <span className={`text-xs font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Streak</span>
-              </div>
-              <div className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}>
-                <AnimatedCounter end={streak} suffix=" days" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card
-            className={`${darkMode ? "bg-gray-800/60 border-gray-700/50 backdrop-blur-xl" : "bg-white/70 border-white/20 backdrop-blur-xl"} shadow-lg rounded-2xl`}
-          >
-            <CardContent className="p-4 text-center">
-              <div className="flex items-center justify-center mb-2">
-                <Trophy className="w-5 h-5 text-purple-500 mr-1" />
-                <span className={`text-xs font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Total XP</span>
-              </div>
-              <div className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}>
-                <AnimatedCounter end={totalXP} />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card
-            className={`${darkMode ? "bg-gray-800/60 border-gray-700/50 backdrop-blur-xl" : "bg-white/70 border-white/20 backdrop-blur-xl"} shadow-lg rounded-2xl`}
-          >
-            <CardContent className="p-4 text-center">
-              <div className="flex items-center justify-center mb-2">
-                <TrendingUp className="w-5 h-5 text-green-500 mr-1" />
-                <span className={`text-xs font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Level</span>
-              </div>
-              <div className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}>
-                <AnimatedCounter end={Math.floor(totalXP / 500) + 1} />
-              </div>
-            </CardContent>
-          </Card>
+      <div className="p-4 sm:p-6 space-y-8 relative">
+        {/* Hero Stats - Improved */}
+        <div className="grid grid-cols-3 gap-4">
+          {[
+            { icon: Zap, label: "Streak", value: streak, suffix: " days", color: "from-yellow-400 to-orange-500" },
+            { icon: Trophy, label: "Total XP", value: totalXP, suffix: "", color: "from-purple-400 to-pink-500" },
+            {
+              icon: TrendingUp,
+              label: "Level",
+              value: Math.floor(totalXP / 500) + 1,
+              suffix: "",
+              color: "from-green-400 to-blue-500",
+            },
+          ].map((stat, index) => (
+            <Card
+              key={index}
+              className={`${darkMode ? "bg-gray-800/80 border-gray-700/50" : "bg-white/80 border-white/20"} backdrop-blur-xl shadow-xl rounded-3xl hover:scale-105 transition-all duration-300 group`}
+            >
+              <CardContent className="p-6 text-center">
+                <div
+                  className={`w-12 h-12 mx-auto mb-3 bg-gradient-to-r ${stat.color} rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                >
+                  <stat.icon className="w-6 h-6 text-white" />
+                </div>
+                <div className={`text-2xl font-bold mb-1 ${darkMode ? "text-white" : "text-gray-900"}`}>
+                  <AnimatedCounter end={stat.value} suffix={stat.suffix} />
+                </div>
+                <span className={`text-xs font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                  {stat.label}
+                </span>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
-        {/* Enhanced Progress Card with Skill Radar */}
+        {/* Main Progress Card - Redesigned */}
         <Card
-          className={`${
-            darkMode
-              ? "bg-gray-800/60 border-gray-700/50 backdrop-blur-xl"
-              : "bg-white/70 border-white/20 backdrop-blur-xl"
-          } shadow-2xl rounded-3xl overflow-hidden relative group hover:shadow-3xl transition-all duration-500`}
+          className={`${darkMode ? "bg-gray-800/80 border-gray-700/50" : "bg-white/80 border-white/20"} backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden relative group`}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <CardContent className="p-6 sm:p-8 relative">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div>
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                      <Sparkles className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className={`font-bold text-lg ${darkMode ? "text-white" : "text-gray-900"}`}>Your Journey</h3>
-                      <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-                        Keep up the great work!
-                      </p>
-                    </div>
-                  </div>
-                  <Badge
-                    variant="secondary"
-                    className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 border-0 px-3 py-1 rounded-full"
-                  >
-                    <AnimatedCounter end={userProgress} suffix="% Complete" />
-                  </Badge>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <CardContent className="p-8 relative">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-4">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-3xl flex items-center justify-center shadow-xl">
+                  <Sparkles className="w-8 h-8 text-white" />
                 </div>
-
-                <div className="space-y-4">
-                  <Progress
-                    value={userProgress}
-                    className={`h-3 ${darkMode ? "bg-gray-700" : "bg-gray-200"} rounded-full overflow-hidden`}
-                  />
-                  <p className={`text-sm leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                    You&apos;re making excellent progress! Complete your assessment to unlock personalized recommendations
-                    and accelerate your career growth.
-                  </p>
+                <div>
+                  <h3 className={`font-bold text-2xl ${darkMode ? "text-white" : "text-gray-900"} mb-1`}>
+                    Your Journey
+                  </h3>
+                  <p className={`${darkMode ? "text-gray-400" : "text-gray-600"}`}>You&apos;re doing amazing! 🚀</p>
                 </div>
               </div>
-
-              <div className="flex items-center justify-center">
-                <div className="text-center">
-                  <h4 className={`font-semibold mb-4 ${darkMode ? "text-white" : "text-gray-900"}`}>Skill Overview</h4>
-                  <SkillRadarChart skills={skillData} size={180} />
-                  <div className="flex items-center justify-center mt-4 space-x-4 text-xs">
-                    <div className="flex items-center space-x-1">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full" />
-                      <span className={darkMode ? "text-gray-400" : "text-gray-600"}>Current</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <div className="w-3 h-3 border-2 border-purple-500 border-dashed rounded-full" />
-                      <span className={darkMode ? "text-gray-400" : "text-gray-600"}>Target</span>
-                    </div>
-                  </div>
+              <div className="text-right">
+                <div className={`text-3xl font-bold ${darkMode ? "text-white" : "text-gray-900"} mb-1`}>
+                  <AnimatedCounter end={userProgress} suffix="%" />
                 </div>
+                <Badge className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 border-0 px-3 py-1 rounded-full">
+                  Complete
+                </Badge>
               </div>
+            </div>
+
+            <div className="space-y-4">
+              <Progress value={userProgress} className="h-4 rounded-full" />
+              <p className={`leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                You&apos;re making excellent progress! Complete your assessment to unlock personalized recommendations and
+                accelerate your career growth.
+              </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {quickActions.map((action) => (
-            <Card
-              key={action.title}
-              className={`${
-                darkMode
-                  ? "bg-gray-800/60 border-gray-700/50 backdrop-blur-xl hover:bg-gray-800/80"
-                  : "bg-white/70 border-white/20 backdrop-blur-xl hover:bg-white/90"
-              } shadow-xl rounded-3xl cursor-pointer group hover:scale-105 hover:shadow-2xl transition-all duration-500 ${action.glow} relative overflow-hidden`}
-              onClick={() => navigateToScreen(action.screen)}
-            >
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${darkMode ? action.darkGradient : action.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
-              />
-              <CardContent className="p-6 relative">
-                <div className="flex items-center justify-between mb-4">
-                  <div
-                    className={`w-14 h-14 bg-gradient-to-br ${action.gradient} rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}
-                  >
-                    <action.icon className="w-7 h-7 text-white" />
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge variant="secondary" className="text-xs bg-green-100 text-green-700 border-0">
-                      {action.xp}
-                    </Badge>
+        {/* Quick Actions - Improved Layout */}
+        <div className="space-y-4">
+          <h2 className={`text-xl font-bold ${darkMode ? "text-white" : "text-gray-900"} mb-4`}>Quick Actions</h2>
+          <div className="grid grid-cols-1 gap-4">
+            {quickActions.map((action) => (
+              <Card
+                key={action.title}
+                className={`${darkMode ? "bg-gray-800/80 border-gray-700/50" : "bg-white/80 border-white/20"} backdrop-blur-xl shadow-xl rounded-3xl cursor-pointer group hover:scale-105 hover:shadow-2xl transition-all duration-500 relative overflow-hidden`}
+                onClick={() => navigateToScreen(action.screen)}
+              >
+                <div
+                  className={`absolute inset-0 bg-gradient-to-r ${action.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                />
+                <CardContent className="p-6 relative">
+                  <div className="flex items-center space-x-4">
+                    <div
+                      className={`w-16 h-16 bg-gradient-to-r ${action.gradient} rounded-3xl flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300`}
+                    >
+                      <action.icon className="w-8 h-8 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className={`font-bold text-xl mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>
+                        {action.title}
+                      </h3>
+                      <p className={`${darkMode ? "text-gray-400" : "text-gray-600"} mb-3`}>{action.description}</p>
+                      <Badge className="bg-green-100 text-green-700 border-0 px-3 py-1 rounded-full">{action.xp}</Badge>
+                    </div>
                     <ChevronRight
-                      className={`w-5 h-5 ${darkMode ? "text-gray-400" : "text-gray-500"} group-hover:translate-x-1 transition-transform duration-300`}
+                      className={`w-6 h-6 ${darkMode ? "text-gray-400" : "text-gray-500"} group-hover:translate-x-2 transition-transform duration-300`}
                     />
                   </div>
-                </div>
-                <h3 className={`font-bold text-lg mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>
-                  {action.title}
-                </h3>
-                <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>{action.description}</p>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
 
-        {/* Feature Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {features.map((feature) => (
-            <Card
-              key={feature.title}
-              className={`${
-                darkMode
-                  ? "bg-gray-800/60 border-gray-700/50 backdrop-blur-xl hover:bg-gray-800/80"
-                  : "bg-white/70 border-white/20 backdrop-blur-xl hover:bg-white/90"
-              } shadow-lg rounded-2xl cursor-pointer group hover:scale-105 hover:shadow-xl transition-all duration-300 relative overflow-hidden`}
-              onClick={() => navigateToScreen(feature.screen)}
-            >
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
-              />
-              <CardContent className="p-5 relative">
-                <div className="flex items-start justify-between mb-3">
+        {/* Feature Grid - Better Organization */}
+        <div className="space-y-4">
+          <h2 className={`text-xl font-bold ${darkMode ? "text-white" : "text-gray-900"} mb-4`}>Explore Features</h2>
+          <div className="grid grid-cols-2 gap-4">
+            {features.map((feature) => (
+              <Card
+                key={feature.title}
+                className={`${darkMode ? "bg-gray-800/80 border-gray-700/50" : "bg-white/80 border-white/20"} backdrop-blur-xl shadow-lg rounded-3xl cursor-pointer group hover:scale-105 hover:shadow-xl transition-all duration-300 relative overflow-hidden`}
+                onClick={() => navigateToScreen(feature.screen)}
+              >
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
+                />
+                <CardContent className="p-6 relative text-center">
                   <div
-                    className={`w-10 h-10 bg-gradient-to-br ${feature.gradient} rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300`}
+                    className={`w-14 h-14 mx-auto mb-4 bg-gradient-to-br ${feature.gradient} rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}
                   >
-                    <feature.icon className="w-5 h-5 text-white" />
+                    <feature.icon className="w-7 h-7 text-white" />
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <h3 className={`font-semibold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>{feature.title}</h3>
+                  <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-600"} mb-3 line-clamp-2`}>
+                    {feature.description}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <Badge className="bg-blue-100 text-blue-700 border-0 text-xs px-2 py-1 rounded-full">
+                      {feature.xp}
+                    </Badge>
                     {feature.badge && (
-                      <Badge className={`text-xs ${feature.badgeColor} border-0 px-2 py-1 rounded-full`}>
+                      <Badge className={`${feature.badgeColor} border-0 text-xs px-2 py-1 rounded-full`}>
                         {feature.badge}
                       </Badge>
                     )}
-                    <ChevronRight
-                      className={`w-4 h-4 ${darkMode ? "text-gray-400" : "text-gray-500"} group-hover:translate-x-1 transition-transform duration-300`}
-                    />
                   </div>
-                </div>
-                <h3 className={`font-semibold text-sm mb-1 ${darkMode ? "text-white" : "text-gray-900"}`}>
-                  {feature.title}
-                </h3>
-                <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-600"} mb-2`}>{feature.description}</p>
-                <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-700 border-0">
-                  {feature.xp}
-                </Badge>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
 
